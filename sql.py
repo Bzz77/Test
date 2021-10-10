@@ -2,17 +2,19 @@ import tkinter
 
 import pymysql
 
-
+# round(float())
 class DatabaseOperation(object):
     def __init__(self, username, password):
         self.username = username
         self.password = password
 
-    def add(self, pizza_id, pizza_name, pizza_toppings, pizza_prize, pizza_vegan):
+    def add(self, pizza_id, pizza_name, pizza_toppings, pizza_vegan, pizza_prize):
+        prize_margin = round(float(pizza_prize)) * 1.4
+        prize_VAT = prize_margin * 1.09
         db = pymysql.connect(host="localhost", user=self.username, password=self.password, db="sys")
         cursor = db.cursor()
-        sql = "insert into PizzaMenu(pizzaid,pizzaname,toppings,prize,vegan) values('%s','%s','%s','%s','%s')" % (
-            pizza_id, pizza_name, pizza_toppings, pizza_prize, pizza_vegan)
+        sql = "insert into PizzaMenu(pizzaid,pizzaname,toppings,vegan,prize,prizemargin,prizeVAT) values('%s','%s','%s','%s','%d','%d','%d')" % (
+            pizza_id, pizza_name, pizza_toppings, pizza_vegan, round(float(pizza_prize)), prize_margin, prize_VAT)
         try:
             cursor.execute(sql)
             db.commit()
@@ -36,7 +38,7 @@ class DatabaseOperation(object):
     def Update(self, pizza_id, pizza_prize):
         db = pymysql.connect(host="localhost", user=self.username, password=self.password, db="sys")
         cursor = db.cursor()
-        sql = "update PizzaMenu set prize= '%s' where id= '%s'" % (pizza_prize, pizza_id)
+        sql = "update PizzaMenu set prize= '%d',prizemargin = '%d',prizeVAT = '%d' where id= '%s'" % (round(float(pizza_prize)), round(float(pizza_prize)) * 1.4, round(float(pizza_prize)) * 1.4 * 1.09, pizza_id)
         try:
             cursor.execute(sql)
             db.commit()
@@ -53,11 +55,9 @@ class DatabaseOperation(object):
             cursor.execute(sql)
             results = cursor.fetchall()
             for row in results:
-                pizza_id = row[0]
-                pizza_name = row[1]
-                price = row[2]
                 tkinter.messagebox.showinfo("find it",
-                                            "pizza_id=%d,pizza_name=%s,price=%d" % (pizza_id, pizza_name, price))
+                                            "pizzaid: %s  pizzaname: %s  toppings: %s   vegan：%s   prize: %d   prize after margin: %d   prize after VAT: %d" %
+                                            (row[0], row[1], row[2], row[3], row[4], row[5], row[6]))
         except:
             return
 
@@ -69,8 +69,8 @@ class DatabaseOperation(object):
             cursor.execute(sql)
             PizzaMenu = cursor.fetchall()
             for row in PizzaMenu:
-                print("pizzaid: %s  pizzaname: %s  toppings: %s  prize: %s  vegan：%s" % (
-                    row[0], row[1], row[2], row[3], row[4]))
+                print("pizzaid: %s  pizzaname: %s  toppings: %s   vegan：%s   prize: %d   prize after margin: %d   prize after VAT: %d" % (
+                    row[0], row[1], row[2], row[3], row[4], row[5], row[6]))
         except:
             db.rollback()
 

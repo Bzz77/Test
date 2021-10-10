@@ -14,7 +14,7 @@ class PizzaUI:
         global window
         window = tk.Tk()
         window.title("Pizza")
-        window.geometry('400x300')
+        window.geometry('400x400')
         page = tk.Frame(window)
         page.pack()
         tk.Label(window, text="Welcome!", font=("黑体", 20)).pack(pady=10)
@@ -23,6 +23,7 @@ class PizzaUI:
         button3 = tk.Button(window, text="update", command=self.pagechange_update).pack(pady=10)
         button4 = tk.Button(window, text="select", command=self.pagechange_select).pack(pady=10)
         button5 = tk.Button(window, text="show", command=self.pagechange_show).pack(pady=10)
+        # button5 = tk.Button(window, text="order", command=).pack(pady=10)
         window.mainloop()
 
     def pagechange_add(self):
@@ -75,7 +76,7 @@ class PizzaUI:
         entry5 = tk.Entry(window2, show=None, textvariable=v5).grid(row=5, column=1)
 
         button = tk.Button(window2, text="add",
-                           command=self.operation.add(v1.get(), v2.get(), v3.get(), v5.get(), v4.get())).grid(row=6, column=1)
+                           command=self.operation.add(v1.get(), v2.get(), v3.get(), v4.get(), v5.get())).grid(row=6, column=1)
         button2 = tk.Button(window2, text="back", command=self.pagechange_main).grid(row=6, column=2, padx=50)
 
         window2.mainloop()
@@ -98,9 +99,9 @@ class PizzaUI:
 
     def menu_update(self):
         global window2
-        window4 = tk.Tk()
-        window4.title("pizza")
-        window4.geometry('400x300')
+        window2 = tk.Tk()
+        window2.title("pizza")
+        window2.geometry('400x300')
 
         tk.Label(window2, text="update pizza", font=("黑体", 20)).grid(row=0, column=1, pady=20)
         tk.Label(window2, text="Please enter the id").grid(row=1, column=0, padx=20, pady=20)
@@ -111,7 +112,7 @@ class PizzaUI:
 
         entry1 = tk.Entry(window2, show=None, textvariable=v7).grid(row=1, column=1)
         entry2 = tk.Entry(window2, show=None, textvariable=v8).grid(row=2, column=1)
-        button = tk.Button(window2, text="update", command=self.operation.Update(v7, v8)).grid(row=3, column=0)
+        button = tk.Button(window2, text="update", command=self.operation.Update(v7.get(), v8.get())).grid(row=3, column=0)
         button2 = tk.Button(window2, text="back", command=self.pagechange_main).grid(row=3, column=1, padx=50)
         window2.mainloop()
 
