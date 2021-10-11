@@ -1,14 +1,53 @@
 import pymysql
 import tkinter as tk
+# from tkinter import *
 import tkinter.messagebox as msg
 from tkinter import ttk
 
 
 class PizzaUI:
 
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
+    def creatp(self):
+        global window3
+        window3 = tk.Tk()
+        window3.title("Login Window")
+        window3.geometry("1000x600+100+50")
+
+        # Login Frame
+        Frame_login = tk.Frame(window3, bg="white")
+        Frame_login.place(x=250, y=100, width=500, height=400)
+
+        # Title & subtitle
+        title = tk.Label(Frame_login, text="Welcome Pizza Shop", font=("Arial", 25, "bold"), fg="#6162FF", bg="white")
+        title.place(x=90, y=30)
+        subtitle = tk.Label(Frame_login, text="Login Here!", font=("Arial", 15, "bold"), fg="#1d1d1d", bg="white")
+        subtitle.place(x=90, y=100)
+
+        global user2
+        user1 = tk.Label(Frame_login, text="Username", font=("Arial", 15, "bold"), fg="grey", bg="white")
+        user1.place(x=90, y=140)
+        user2 = tk.Entry(Frame_login, show=None, font=("Arial", 15), bg="#E7E6E6")
+        user2.place(x=90, y=170, width=320, height=35)
+
+        global password2
+        password1 = tk.Label(Frame_login, text="Password", font=("Arial", 15, "bold"), fg="grey", bg="white")
+        password1.place(x=90, y=210)
+        password2 = tk.Entry(Frame_login, show='*', font=("Arial", 15), bg="#E7E6E6")
+        password2.place(x=90, y=240, width=320, height=35)
+
+        submit = tk.Button(Frame_login, command=self.check_function, cursor="hand2", text="Log in!", bd=0, font=("Arial", 12), fg="white", bg="blue")
+        submit.place(x=90, y=320, width=180, height=40)
+
+        window3.mainloop()
+
+    def check_function(self):
+        # db = pymysql.connect(host="localhost", user=user2.get(), password=password2.get(), db="sys")
+
+
+        self.username = user2.get()
+        self.password = password2.get()
+        window3.destroy()
+        self.mainpage()
 
     def mainpage(self):
         global window
@@ -143,11 +182,12 @@ class PizzaUI:
         window2.geometry('1500x500')
 
         tk.Button(window2, text='show', font=('Arial', 12), width=10, command=self.show).place(x=900, y=25)
-        button2 = tk.Button(window2, text="back", command=self.pagechange_main).place(x=900, y = 425)
+        button2 = tk.Button(window2, text="back", command=self.pagechange_main).place(x=900, y=425)
 
         global tree
         yscrollbar = ttk.Scrollbar(window2, orient='vertical')
-        tree = ttk.Treeview(window2, columns=('1', '2', '3', '4', '5', '6', '7'), show="headings",yscrollcommand=yscrollbar.set)
+        tree = ttk.Treeview(window2, columns=('1', '2', '3', '4', '5', '6', '7'), show="headings",
+                            yscrollcommand=yscrollbar.set)
         tree.column('1', width=50, anchor='center')
         tree.column('2', width=150, anchor='center')
         tree.column('3', width=350, anchor='center')
@@ -200,8 +240,8 @@ class PizzaUI:
         db = pymysql.connect(host="localhost", user=self.username, password=self.password, db="sys")
         cursor = db.cursor()
         sql = "update PizzaMenu set prize= '%s',prizeaftermargin = '%s',prizeafterVAT = '%s' where id= '%s'" % (
-        entry8.get(),
-        round(float(entry8.get())) * 1.4, round(float(entry8.get())) * 1.4 * 1.09, entry7.get())
+            entry8.get(),
+            round(float(entry8.get())) * 1.4, round(float(entry8.get())) * 1.4 * 1.09, entry7.get())
 
         try:
             cursor.execute(sql)
@@ -244,3 +284,4 @@ class PizzaUI:
         except:
             db.rollback()
         db.close()
+
